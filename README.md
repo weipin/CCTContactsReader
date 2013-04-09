@@ -14,7 +14,7 @@ How to use CCTContactsReader
 
 Before you get started, you need to add CCTContactsReader.h, CCTContactsReader.m and AddressBook.framework to your project.
 
-After that, you can create a CCTContactsReader instance, assign it a delegate and call `obtainDataFromAddressbook:`. The argument `propertyKeys` is the 'keys' of the data you want to obtain as Objective-C objects. At the time of writing this, there are only two types available: `CCTContactsReaderABPersonEmailProperty`(email address) and `CCTContactsReaderABPersonPhoneProperty`(phone number). The CCTContactsReader instance will return the objects in delegate method `contactsReader:didObtainData:authorizationStatus:authorizationStatus:error:`, as argument `data`.
+After that, you can create a CCTContactsReader instance, assign it a delegate and call `obtainDataFromAddressbook:`. The argument `propertyKeys` is the 'keys' of the data you want to obtain as Objective-C objects. At the time of writing this, there are only two types available: `CCTContactsReaderABPersonEmailProperty`(email address) and `CCTContactsReaderABPersonPhoneProperty`(phone number). The CCTContactsReader instance will return the objects in delegate method `contactsReader:didObtainData:authorizationStatus:error:`, as argument `data`.
 
 ```
     CCTContactsReader *reader = [[CCTContactsReader alloc] init];
@@ -24,7 +24,7 @@ After that, you can create a CCTContactsReader instance, assign it a delegate an
     [reader obtainDataFromAddressbook:propertyKeys];
 ```
 
-- Delegate method `contactsReader:didObtainData:authorizationStatus:authorizationStatus:error:` is *required*. You can use this method to access the objects obtained from database, and check access authorization status and errors.
+- Delegate method `contactsReader:didObtainData:authorizationStatus:error:` is *required*. You can use this method to access the objects obtained from database, and check access authorization status and errors.
 
 - Delegate method `contactsReader:didGetAddressbook:` is *optional*. In the case that you want to process the database by yourself, you can find the addressbook(`ABAddressBookRef`) in this method. CCTContactsReader will create and release the addressbook for you. Also, `contactsReader:didGetAddressbook:` will only be called if everything goes well -- user grants your app access to the contact data, no error happens, etc. The idea is, by letting the CCTContactsReader do the dirty work, you can focus on the task of getting data.
   
@@ -61,7 +61,7 @@ After that, you can create a CCTContactsReader instance, assign it a delegate an
   
 - How to handle access authorization status and errors?
 
-  In delegate method `contactsReader:didObtainData:authorizationStatus:authorizationStatus:error:`, you can check argument `authorizationStatus` and `error`. The code in ContactsReaderDemo is a good starting point, which handles all the necessary cases.
+  In delegate method `contactsReader:didObtainData:authorizationStatus:error:`, you can check argument `authorizationStatus` and `error`. The code in ContactsReaderDemo is a good starting point, which handles all the necessary cases.
   - Permission was previously denied.
   - Permission is denied.
   - Restricted.
@@ -116,9 +116,9 @@ When you launch ContactsReaderDemo, it will display a blank text view with a but
 
 Let's take a look on how ContactsReaderDemo uses `CCTContactsReader`.
 
-- As delegate of the CCTContactsReader, ViewController implements methods `contactsReader:didObtainData:authorizationStatus:authorizationStatus:error:` and `contactsReader:didGetAddressbook:` in ViewController.m.
+- As delegate of the CCTContactsReader, ViewController implements methods `contactsReader:didObtainData:authorizationStatus:error:` and `contactsReader:didGetAddressbook:` in ViewController.m.
 - In action method `obtainData:`, a `CCTContactsReader` instance is created and method `obtainDataFromAddressbook:` is called. `@[@(CCTContactsReaderABPersonEmailProperty)]` was passed as argument `propertyKeys`, to obtain all the email addresses.
 - In delegate method `contactsReader:didGetAddressbook:`, ContactsReaderDemo uses a helper method `obtainDataFromAddressBook:forPropertyKeys:` to obtain all the phone numbers, and store the objects in ivar `_data`.
-- In delegate method `contactsReader:didObtainData:authorizationStatus:authorizationStatus:error:`, ContactsReaderDemo displays the results in text view.
+- In delegate method `contactsReader:didObtainData:authorizationStatus:error:`, ContactsReaderDemo displays the results in text view.
   The results is a combination of the argument `data`(emails), and the ivar `_data`(phone numbers).
 
